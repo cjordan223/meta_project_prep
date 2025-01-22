@@ -8,6 +8,14 @@
             <h3>Results:</h3>
             <pre> {{ results }}</pre>
         </div>
+        <div v-if="questions.length > 0">
+            <h3>Questions:</h3>
+            <ul>
+                <li v-for="question in questions" :key="question.id">
+                    {{ question.question }}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -19,8 +27,19 @@ export default {
         return {
             query: '',
             results: [],
-            error: ''
+            error: '',
+            questions: []
         };
+    },
+    async mounted() {
+        try {
+            const response = await axios.get('http://localhost:5000/questions');
+            console.log('loaded questions:', response.data);
+            this.questions = response.data;
+        } catch (err) {
+            console.error('Error fetching questions:', err);
+            this.error = 'An error occurred while fetching questions.';
+        }
     },
     methods: {
         async submitQuery() {
@@ -34,12 +53,10 @@ export default {
                     this.error = response.data.error;
                 }
             } catch (err) {
+                console.error('Error executing query:', err);
                 this.error = 'An error occurred while executing the query.';
             }
         }
-
     }
 };
-
-
 </script>

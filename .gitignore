@@ -1,0 +1,4 @@
+.env
+frontend/meta-prep/package-lock.json
+frontend/meta-prep/.vscode
+frontend/meta-prep/node_modules
